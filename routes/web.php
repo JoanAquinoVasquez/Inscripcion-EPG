@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
+use App\Actions\Fortify\CreateNewUser;
 
 
 /*
@@ -19,11 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+// Rutas protegidas por autenticación
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Ruta para el panel de administración
+    Route::get('/admin', [HomeController::class, 'index'])->name('admin.home');
     Route::get('/dashboard', function () {
         return view('admin.index');
     })->name('dashboard');

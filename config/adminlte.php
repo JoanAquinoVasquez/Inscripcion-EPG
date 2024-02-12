@@ -312,10 +312,10 @@ return [
             'can'  => 'manage-blog',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
+            'text'        => 'Inicio',
+            'url'         => '/dashboard',
             'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
+            'label'       => 1,
             'label_color' => 'success',
         ],
         ['header' => 'account_settings'],
@@ -325,14 +325,9 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Nuevo administrador',
-            'url'  => 'register',
+            'text' => 'Validar Vouchers',
+            'url'  => '/validacion',
             'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
         ],
         [
             'text'    => 'multilevel',
