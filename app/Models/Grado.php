@@ -10,6 +10,6 @@ class Grado extends Model
     use HasFactory;
 
     protected $filliable = [
-        'nombre';
-    ]
+        'nombre',
+    ];
 }
