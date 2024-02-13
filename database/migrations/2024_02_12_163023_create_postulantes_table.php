@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('Correo');
             $table->string('DNI')->unique();
             $table->string('Celular');
+            $table->date('Fecha_nacimiento');
+            $table->string('Sexo');
+            $table->string('Departamento');
+            $table->string('Provincia');
+            $table->string('Distrito');
             $table->string('Direccion');
             $table->timestamps();
         });

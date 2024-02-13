@@ -16,6 +16,11 @@ class Postulante extends Model
         'Correo',
         'DNI',
         'Celular',
+        'Fecha_nacimiento',
+        'Sexo',
+        'Departamento',
+        'Provincia',
+        'Distrito',
         'Direccion',
     ];
 }

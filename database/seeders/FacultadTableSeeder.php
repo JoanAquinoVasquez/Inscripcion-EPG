@@ -24,7 +24,8 @@ class FacultadTableSeeder extends Seeder
             'FIA',
             'FASCHE',
             'FCB',
-            'FDCP'
+            'FDCP',
+            'FCCBB'
         ];
 
 
