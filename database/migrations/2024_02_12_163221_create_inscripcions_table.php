@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('postulante_id')->constrained('postulantes');
             $table->foreignId('programa_id')->constrained('programas');
-            $table->binary('voucher');
+            $table->string('cod_voucher');
+            $table->string('voucher');
             $table->boolean('validado')->default(false);
             $table->timestamps();
         });

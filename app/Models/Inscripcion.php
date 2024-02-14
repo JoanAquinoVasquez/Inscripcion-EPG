@@ -12,6 +12,7 @@ class Inscripcion extends Model
     protected $fillable = [
         'postulante_id',
         'programa_id',
+        'cod_voucher',
         'voucher',
         'validado',
     ];
