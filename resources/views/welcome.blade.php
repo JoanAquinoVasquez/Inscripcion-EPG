@@ -114,10 +114,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('guardar.inscripcion') }}">
+                    <form method="POST" action="{{ route('guardar.inscripcion') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <h3>1. Elegir programa</h3>
+                            <input type="hidden" name="id_programa" id="id_programa">
                             <select id="selectPrograma" class="form-control" onchange="mostrarFacultad()">
                                 <option value="" selected disabled>Selecciona el programa</option>
                                 @foreach($programas_maestria as $programa)
@@ -136,6 +137,11 @@
 
 
                             <script>
+
+                                document.getElementById('selectPrograma').addEventListener('change', function () {
+                                    var selectValue = this.value;
+                                    document.getElementById('id_programa').value = selectValue;
+                                });
                                 function mostrarFacultad() {
                                     var selectPrograma = document.getElementById("selectPrograma");
                                     var textoFacultad = document.getElementById("textoFacultad");
@@ -313,7 +319,7 @@
                                         infoFacultad1.style.display = "block"; // Muestra el div con la información de la facultad
                                     } else {
                                         infoFacultad1.style.display = "none"; // Oculta el div cuando no hay opción seleccionada
-        }
+                                    }
 
                                 }
                             </script>
@@ -410,7 +416,7 @@
                                         infoFacultad2.style.display = "block"; // Muestra el div con la información de la facultad
                                     } else {
                                         infoFacultad2.style.display = "none"; // Oculta el div cuando no hay opción seleccionada
-        }
+                                    }
 
                                 }
                             </script>

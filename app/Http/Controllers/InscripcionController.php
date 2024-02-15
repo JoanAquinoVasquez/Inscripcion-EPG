@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inscripcion;
 use App\Models\Postulante;
+use Illuminate\Database\QueryException;
 
 class InscripcionController extends Controller
 {
@@ -36,12 +37,12 @@ class InscripcionController extends Controller
         \Log::info('Datos del Request:', $request->all());
 
         $request->validate([
-            'selectPrograma' => 'required',
+            'id_programa' => 'required|string',
             'nombre' => 'required|string',
             'ap' => 'required|string',
             'am' => 'required|string',
             'correo' => 'required|email',
-            'dni' => 'required|string',
+            'dni' => 'required|unique:postulantes,dni',
             'celular' => 'required|string',
             'fecha_nacimiento' => 'required|date',
             'departamento' => 'required|string',
@@ -50,27 +51,29 @@ class InscripcionController extends Controller
             'direccion' => 'required|string',
             'sexo' => 'required|string',
             'cod_voucher' => 'required|string',
-            'voucher' => 'required|string',
-            
         ]);
 
         \Log::info('Los datos han sido validados con éxito.');
 
-        // Crea un nuevo postulante con los datos del request
-        $postulante = Postulante::create([
-            'nombre' => $request->nombre,
-            'ap' => $request->ap,
-            'am' => $request->am,
-            'correo' => $request->correo,
-            'dni' => $request->dni,
-            'celular' => $request->celular,
-            'direccion' => $request->direccion,
-            'sexo' => $request->sexo,
-            'fecha_nacimiento' => $request->fecha_nacimiento,
-            'departamento' => $request->departamento,
-            'distrito' => $request->distrito,
-            'provincia' => $request->provincia,
-        ]);
+            // Crea un nuevo postulante con los datos del request
+            $postulante = Postulante::create([
+                'Nombres' => $request->nombre,
+                'Ap' => $request->ap,
+                'Am' => $request->am,
+                'Correo' => $request->correo,
+                'DNI' => $request->dni,
+                'Celular' => $request->celular,
+                'Direccion' => $request->direccion,
+                'Sexo' => $request->sexo,
+                'Fecha_nacimiento' => $request->fecha_nacimiento,
+                'Departamento' => $request->departamento,
+                'Distrito' => $request->distrito,
+                'Provincia' => $request->provincia,
+            ]);
+
+
+
+        \Log::info('si se registro estudiante supuestamente');
 
         // Carga y mueve el archivo del voucher al sistema de archivos público
         $voucher = $request->file('voucher');
@@ -80,12 +83,12 @@ class InscripcionController extends Controller
         // Crea una nueva inscripción asociada al postulante creado
         $inscripcion = Inscripcion::create([
             'postulante_id' => $postulante->id,
-            'programa_id' => $request->selectPrograma,
+            'programa_id' => $request->id_programa,
             'cod_voucher' => $request->cod_voucher,
             'voucher' => '/uploads/' . $voucherNombre, // Guarda la ruta del archivo en la base de datos
-            'validado' => 'Pendiente',
             // Agrega los demás campos necesarios para crear una inscripción
         ]);
+
 
         return view('constancia');
     }
