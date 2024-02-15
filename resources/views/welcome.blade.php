@@ -121,7 +121,7 @@
                         <div class="form-group">
                             <h3>1. Elegir programa</h3>
                             <input type="hidden" name="id_programa" id="id_programa">
-                            <select id="selectPrograma" class="form-control" onchange="mostrarFacultad()">
+                            <select id="selectPrograma" class="form-control" onchange="mostrarFacultad()" required>
                                 <option value="" selected disabled>Selecciona el programa</option>
                                 @foreach($programas_maestria as $programa)
                                 <option value="{{ $programa->id }}" data-facultad="{{ $programa->facultad->nombre }}">{{
@@ -163,21 +163,21 @@
                         </div>
                         <div class="form-group">
                             <h3>2. Datos Personales</h3>
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder=" Nombres">
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder=" Nombres" required>
                             @error('nombre')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id='ap' name='ap' placeholder=" Apellido Paterno">
+                            <input type="text" class="form-control" id='ap' name='ap' placeholder=" Apellido Paterno" required >
                             @error('ap')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" id='am' name='am' placeholder=" Apellido Materno">
+                            <input type="text" class="form-control" id='am' name='am' placeholder=" Apellido Materno" required>
                             @error('am')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -185,56 +185,56 @@
                         <div class="form-group">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id='correo' name='correo' placeholder=" @ Email">
+                            <input type="text" class="form-control" id='correo' name='correo' placeholder=" @ Email" required>
                             @error('correo')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">DNI: </label>
-                            <input type="text" class="form-control" id='dni' name='dni'>
+                            <input type="text" class="form-control" id='dni' name='dni'  oninput="limitarDNI(this)" required>
                             @error('dni')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Celular: </label>
-                            <input type="text" id='celular' name='celular' class="form-control">
+                            <input type="text" id='celular' name='celular' class="form-control" oninput="limitarCelular(this)" required>
                             @error('celular')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento">
+                            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
                             @error('fecha_nacimiento')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="departamento">Departamento: </label>
-                            <input type="text" id='departamento' name='departamento' class="form-control">
+                            <input type="text" id='departamento' name='departamento' class="form-control" required>
                             @error('departamento')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="provincia">Provincia: </label>
-                            <input type="text" id='provincia' name='provincia' class="form-control">
+                            <input type="text" id='provincia' name='provincia' class="form-control" required>
                             @error('provincia')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="distrito">Distrito: </label>
-                            <input type="text" id='distrito' name='distrito' class="form-control">
+                            <input type="text" id='distrito' name='distrito' class="form-control" required>
                             @error('distrito')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="direccion">Dirección: </label>
-                            <input type="text" id='direccion' name='direccion' class="form-control">
+                            <input type="text" id='direccion' name='direccion' class="form-control" required>
                             @error('direccion')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -256,15 +256,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Codigo del Voucher: </label>
-                            <input type="text" id='cod_voucher' name='cod_voucher' class="form-control">
+                            <label for="exampleInputEmail1">N° Operacion (Voucher): </label>
+                            <input type="text" id='cod_voucher' name='cod_voucher' class="form-control" oninput="limitarCod_voucher(this)"required>
                             @error('cod_voucher')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Voucher: </label>
-                            <input type="file" accept=".pdf" class="form-control-file" id='voucher' name='voucher'>
+                            <input type="file" accept=".pdf" class="form-control-file" id='voucher' name='voucher' required>
                             @error('voucher')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -484,8 +484,64 @@
             Opciones se agregarán dinámicamente aquí
         </select>-->
 </body>
-
 <script>
+
+function validarFormulario() {
+        // Obtener los valores de los campos
+        var nombre = document.getElementById('nombre').value;
+        var ap = document.getElementById('ap').value;
+        var am = document.getElementById('am').value;
+        var correo = document.getElementById('correo').value;
+        var dni = document.getElementById('dni').value;
+        var celular = document.getElementById('celular').value;
+        var fechaNacimiento = document.getElementById('fecha_nacimiento').value;
+        var departamento = document.getElementById('departamento').value;
+        var provincia = document.getElementById('provincia').value;
+        var distrito = document.getElementById('distrito').value;
+        var direccion = document.getElementById('direccion').value;
+        var sexo = document.querySelector('input[name="sexo"]:checked');
+        var codVoucher = document.getElementById('cod_voucher').value;
+        var voucher = document.getElementById('voucher').value;
+
+        // Verificar si algún campo está vacío
+        if (nombre === '' || ap === '' || am === '' || correo === '' || dni === '' || celular === '' || fechaNacimiento === '' ||
+            departamento === '' || provincia === '' || distrito === '' || direccion === '' || sexo === null || codVoucher === '' || voucher === '') {
+            mostrarAlerta("Por favor, complete todos los campos",'warning');
+            return false; // Evitar que se envíe el formulario
+        }else{
+            verificarDNI();
+        }
+    }
+
+function limitarCod_voucher(input) {
+    // Eliminar caracteres no numéricos
+    input.value = input.value.replace(/[^\d]/g, '');
+
+    // Limitar la longitud del valor a 8 caracteres
+    if (input.value.length > 7) {
+        input.value = input.value.slice(0, 7);
+    }
+}
+
+    function limitarDNI(input) {
+    // Eliminar caracteres no numéricos
+    input.value = input.value.replace(/[^\d]/g, '');
+
+    // Limitar la longitud del valor a 8 caracteres
+    if (input.value.length > 8) {
+        input.value = input.value.slice(0, 8);
+    }
+}
+
+function limitarCelular(input) {
+    // Eliminar caracteres no numéricos
+    input.value = input.value.replace(/[^\d]/g, '');
+
+    // Limitar la longitud del valor a 8 caracteres
+    if (input.value.length > 9) {
+        input.value = input.value.slice(0, 9);
+    }
+}
     // Función para mostrar una alerta con SweetAlert2
     function mostrarAlerta(mensaje, tipo) {
         Swal.fire({
@@ -549,8 +605,8 @@
 
     // Asignar la función verificarDNI al evento clic del botón "Enviar"
     document.getElementById('boton-enviar').addEventListener('click', function (event) {
+        validarFormulario();
         event.preventDefault(); // Prevenir el envío del formulario
-        verificarDNI(); // Verificar el DNI antes de enviar el formulario
     });
 </script>
 

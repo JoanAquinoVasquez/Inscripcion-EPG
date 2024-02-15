@@ -36,9 +36,6 @@ Route::post('/confirmacion', [InscripcionController::class, 'store'])->name('gua
 Route::post('/verificar-cod-voucher', [InscripcionController::class, 'verificarCodigoVoucher'])->name('verificar.cod_voucher');
 Route::post('/verificar-dni', [InscripcionController::class, 'verificarDNI'])->name('verificar.dni');
 
-Route::get('/confirmacion', function () {
-    return view('confirmacion');
-})->name('confirmacion');
 
 // Rutas protegidas por autenticación
 Route::middleware(['auth:sanctum'])->group(function () {

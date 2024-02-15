@@ -118,7 +118,7 @@ class InscripcionController extends Controller
         ]);
 
 
-        return view('constancia');
+        return view('confirmacion');
     }
 
     /**
