@@ -33,6 +33,8 @@ Route::get('/', function () {
 });
 
 Route::post('/confirmacion', [InscripcionController::class, 'store'])->name('guardar.inscripcion');
+Route::post('/verificar-cod-voucher', [InscripcionController::class, 'verificarCodigoVoucher'])->name('verificar.cod_voucher');
+Route::post('/verificar-dni', [InscripcionController::class, 'verificarDNI'])->name('verificar.dni');
 
 Route::get('/confirmacion', function () {
     return view('confirmacion');

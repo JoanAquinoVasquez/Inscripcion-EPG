@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Inscripciones EPG</title>
 
@@ -114,7 +115,8 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('guardar.inscripcion') }}" enctype="multipart/form-data">
+                    <form id="formulario" method="POST" action="{{ route('guardar.inscripcion') }}"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <h3>1. Elegir programa</h3>
@@ -273,7 +275,7 @@
                             <label for="exampleInputPassword1">Contraseña</label>
                             <input type="password" class="form-control" id="exampleInputPassword1">
                         </div>-->
-                        <button type="submit" class="btn btn-primary mx-auto d-block">Enviar</button>
+                        <button id="boton-enviar" type="submit" class="btn btn-primary mx-auto d-block">Enviar</button>
                     </form>
                 </div>
             </div>
@@ -483,7 +485,77 @@
         </select>-->
 </body>
 
+<script>
+    // Función para mostrar una alerta con SweetAlert2
+    function mostrarAlerta(mensaje, tipo) {
+        Swal.fire({
+            title: 'Alerta',
+            text: mensaje,
+            icon: tipo,
+            confirmButtonText: 'Aceptar'
+        });
+    }
+
+    function verificarCodigoVoucher() {
+        var codVoucher = document.getElementById('cod_voucher').value;
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        $.ajax({
+            type: 'POST',
+            url: '/verificar-cod-voucher',
+            data: { cod_voucher: codVoucher, _token: token },
+            success: function (response) {
+                if (response.error) {
+                    mostrarAlerta('El código del voucher ya ha sido registrado previamente', 'error');
+                } else {
+                    document.getElementById('formulario').submit();
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    // Función para verificar si el DNI ya ha sido registrado antes de enviar el formulario
+    function verificarDNI() {
+        // Obtener el valor del DNI desde el campo de entrada
+        var dni = document.getElementById('dni').value;
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        // Realizar una solicitud AJAX para verificar el DNI
+        $.ajax({
+            type: 'POST',
+            url: '/verificar-dni', // Utiliza la URL absoluta de la ruta
+            data: {
+                dni: dni,
+                _token: token
+            },
+            success: function (response) {
+                console.log(response);
+                // Si el DNI ya está registrado, mostrar una alerta
+                if (response.error) {
+                    mostrarAlerta('El DNI ingresado ya ha sido registrado previamente', 'error');
+                }else{
+                    verificarCodigoVoucher();
+                }
+            },
+            error: function (xhr, status, error) {
+                // Manejar errores de la solicitud AJAX
+                console.error(error);
+            }
+        });
+    }
+
+    // Asignar la función verificarDNI al evento clic del botón "Enviar"
+    document.getElementById('boton-enviar').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevenir el envío del formulario
+        verificarDNI(); // Verificar el DNI antes de enviar el formulario
+    });
+</script>
+
 <!-- Enlaces a JavaScript de Bootstrap y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

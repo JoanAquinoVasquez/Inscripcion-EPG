@@ -29,12 +29,41 @@ class InscripcionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+
+
+     public function verificarCodigoVoucher(Request $request)
+     {
+         $voucherExistente = Inscripcion::where('cod_voucher', $request->cod_voucher)->exists();
+     
+         if ($voucherExistente) {
+             return response()->json(['error' => 'El código del voucher ya ha sido registrado previamente']);
+         }
+     
+         return response()->json(['success' => 'El código del voucher está disponible']);
+     }
+     
+
+    public function verificarDNI(Request $request)
+    {
+        // Verificar si ya existe un registro con el mismo DNI
+        $dniExistente = Postulante::where('DNI', $request->dni)->exists();
+        \Log::info($request->dni);
+
+        // Si ya existe un registro con el mismo DNI, devolver un mensaje de error
+        if ($dniExistente) {
+            return response()->json(['error' => 'El DNI ya ha sido registrado']);    
+        }
+
+        // Si el DNI no está registrado, devolver una respuesta satisfactoria
+        return response()->json(['success' => 'El DNI está disponible']);
+        
+    }
+
     public function store(Request $request)
     {
 
-        \Log::info('Se ha llamado al método store en InscripcionController');
-        // Imprimir todos los valores del request
-        \Log::info('Datos del Request:', $request->all());
+        // Imprimir todos los valores del reques
 
         $request->validate([
             'id_programa' => 'required|string',
@@ -55,25 +84,24 @@ class InscripcionController extends Controller
 
         \Log::info('Los datos han sido validados con éxito.');
 
-            // Crea un nuevo postulante con los datos del request
-            $postulante = Postulante::create([
-                'Nombres' => $request->nombre,
-                'Ap' => $request->ap,
-                'Am' => $request->am,
-                'Correo' => $request->correo,
-                'DNI' => $request->dni,
-                'Celular' => $request->celular,
-                'Direccion' => $request->direccion,
-                'Sexo' => $request->sexo,
-                'Fecha_nacimiento' => $request->fecha_nacimiento,
-                'Departamento' => $request->departamento,
-                'Distrito' => $request->distrito,
-                'Provincia' => $request->provincia,
-            ]);
+        // Crea un nuevo postulante con los datos del request
+        $postulante = Postulante::create([
+            'Nombres' => $request->nombre,
+            'Ap' => $request->ap,
+            'Am' => $request->am,
+            'Correo' => $request->correo,
+            'DNI' => $request->dni,
+            'Celular' => $request->celular,
+            'Direccion' => $request->direccion,
+            'Sexo' => $request->sexo,
+            'Fecha_nacimiento' => $request->fecha_nacimiento,
+            'Departamento' => $request->departamento,
+            'Distrito' => $request->distrito,
+            'Provincia' => $request->provincia,
+        ]);
 
 
 
-        \Log::info('si se registro estudiante supuestamente');
 
         // Carga y mueve el archivo del voucher al sistema de archivos público
         $voucher = $request->file('voucher');
